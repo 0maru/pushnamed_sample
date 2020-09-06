@@ -6,7 +6,8 @@ void main() => runApp(MyApp());
 
 final router = Router.create({
   '/': (context, _) => Home(),
-  '/post/:id': (context, args) => Feed(args["id"]),
+  '/post/:id': (context, args) => Feed(body: args.body),
+  '/withBody': (context, args) => PageWithBody(body: args.body),
 });
 
 class MyApp extends StatelessWidget {
@@ -26,24 +27,54 @@ class Home extends StatelessWidget {
       appBar: AppBar(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(
-            context,
-            '/post/1/',
-            arguments: 'test',
-          );
+          Navigator.of(context).pushNamed("/post/1/", arguments: {"key": "value"});
         },
       ),
-      body: Center(
-        child: Text('Home'),
+      body: Column(
+        children: [
+          FlatButton(
+            child: Text('test'),
+            onPressed: () {
+              Navigator.of(context).pushNamed("/withBody", arguments: {"key": "value"});
+            },
+          ),
+          Center(
+            child: Text('Home'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PageWithBody extends StatelessWidget {
+  final Object body;
+
+  const PageWithBody({Key key, @required this.body}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Text("Body: $body"),
       ),
     );
   }
 }
 
 class Feed extends StatelessWidget {
-  Feed(this.data);
+//  final String data;
+  final Object content;
 
-  final String data;
+  const Feed._({
+    Key key,
+    this.content,
+  }) : super(key: key);
+
+  const Feed.fromRouteArguments(Object object) : this._(content: object as bool);
+
+  static Object toRouteArguments(Object content) => content;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +87,7 @@ class Feed extends StatelessWidget {
         },
       ),
       body: Center(
-        child: Text(data),
+        child: Text("$body"),
       ),
     );
   }

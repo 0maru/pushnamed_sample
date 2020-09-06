@@ -66,10 +66,8 @@ class _RouteEntity {
 }
 
 _RouteEntity _buildRouteEntry(String name, RouteBuilder routeBuilder) {
-  final cleanRouteName = _getRoutePath(name);
-  final variableRegex = '[a-zA-Z0-9_-]+';
-  final nameWithParameters = cleanRouteName.replaceAllMapped(
-    RegExp(':($variableRegex)'),
+  final nameWithParameters = _getRoutePath(name).replaceAllMapped(
+    RegExp(':([a-zA-Z0-9_-]+)'),
     (match) {
       final groupName = match.group(1);
       return '(?<$groupName>[a-zA-Z0-9_\\\-\.,:;\+*^%\$@!]+)';
