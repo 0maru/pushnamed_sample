@@ -4,12 +4,17 @@ import 'package:pushnamed_sample/router.dart';
 
 void main() => runApp(MyApp());
 
+final router = Router.create({
+  '/': (context, _) => Home(),
+  '/post/:id': (context, args) => Feed(args["id"]),
+});
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: RouterName.homeRoute,
-      onGenerateRoute: Router().generateRoute,
+      onGenerateRoute: router.generateRoute,
     );
   }
 }
@@ -23,7 +28,7 @@ class Home extends StatelessWidget {
         onPressed: () {
           Navigator.pushNamed(
             context,
-            RouterName.feedRoute,
+            '/post/1/',
             arguments: 'test',
           );
         },
@@ -46,7 +51,7 @@ class Feed extends StatelessWidget {
         onPressed: () {
           Navigator.pushNamed(
             context,
-            RouterName.homeRoute,
+            '/',
           );
         },
       ),
