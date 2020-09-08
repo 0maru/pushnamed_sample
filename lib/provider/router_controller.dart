@@ -21,17 +21,29 @@ class RouterController with ChangeNotifier {
   }
 
   /// context.read<RouterController>().push<T>(path);
-  Future<T> push<T extends Object>(String path, {Object arguments}) {
-    return _navigatorKey.currentState.pushNamed<T>(
+  ///
+  /// [root] root のナビケータを操作する場合は true
+  Future<T> push<T extends Object>(
+    String path, {
+    Object arguments,
+    bool root = false,
+  }) {
+    GlobalKey<NavigatorState> _navigator = navigatorKeys[currentTabName];
+    if (root) {
+      // BottomTabNavigator の上にページを出したい場合
+      _navigator = _navigatorKey;
+    }
+    return _navigator.currentState.pushNamed<T>(
       path,
       arguments: arguments,
     );
   }
 
-  Future<T> tabPush<T extends Object>(String path, {Object arguments}) {
-    return navigatorKeys[currentTabName].currentState.pushNamed<T>(
-          path,
-          arguments: arguments,
-        );
+  void pop<T extends Object>([T result, bool root = false]) {
+    GlobalKey<NavigatorState> _navigator = navigatorKeys[currentTabName];
+    if (root) {
+      _navigator = _navigatorKey;
+    }
+    _navigator.currentState.pop<T>(result);
   }
 }
