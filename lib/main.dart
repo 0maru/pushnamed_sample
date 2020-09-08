@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pushnamed_sample/constants.dart';
+import 'package:pushnamed_sample/provider/application_controller.dart';
+import 'package:pushnamed_sample/provider/router_controller.dart';
 import 'package:pushnamed_sample/router.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => ApplicationController(locator: _.read),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => RouterController(locator: _.read),
+          ),
+        ],
+        child: MyApp(),
+      ),
+    );
 
 final router = Router.create({
   '/': (context, _) => Home(),
-  '/post/:id': (context, args) => Feed(body: args.body),
+  '/post/:id': (context, args) => Feed.fromRouteArguments(args.body),
   '/withBody': (context, args) => PageWithBody(body: args.body),
 });
 
@@ -87,7 +102,7 @@ class Feed extends StatelessWidget {
         },
       ),
       body: Center(
-        child: Text("$body"),
+        child: Text("$content"),
       ),
     );
   }
