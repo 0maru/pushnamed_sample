@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pushnamed_sample/constants.dart';
-import 'package:pushnamed_sample/pages/web_view.dart';
+import 'package:pushnamed_sample/pages/not_found.dart';
 import 'package:pushnamed_sample/provider/application_controller.dart';
 import 'package:pushnamed_sample/provider/router_controller.dart';
 import 'package:pushnamed_sample/router/config.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       initialRoute: RouterName.homeRoute,
       onGenerateRoute: router.generateRoute,
       onUnknownRoute: (settings) {
-        return CupertinoPageRoute(builder: (_) => WebViewPage(url: settings.name));
+        return CupertinoPageRoute(builder: (_) => NotFoundPage());
       },
     );
   }
