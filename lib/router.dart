@@ -6,6 +6,7 @@ typedef Widget RouteBuilder(
   RouteArgs args,
 );
 
+/// https:// がついていたら Exception を出してブラウザで開くようにする？
 abstract class Router {
   Route<dynamic> generateRoute(RouteSettings settings);
 
@@ -13,43 +14,45 @@ abstract class Router {
 }
 
 class _RouterImpl implements Router {
-  final List<_RouteEntity> _routeDict;
+  final List<_RouteEntity> _routerDict;
 
   _RouterImpl(Map<String, RouteBuilder> routeMap)
-      : _routeDict = <_RouteEntity>[
+      : _routerDict = <_RouteEntity>[
           for (var key in routeMap.keys) _buildRouteEntry(key, routeMap[key]),
         ];
 
   @override
   Route generateRoute(RouteSettings settings) {
-    final routePath = _getRoutePath(settings.name);
-    RegExpMatch match;
-    final routeEntry = _routeDict.firstWhere((it) {
-      match = it.regex.firstMatch(routePath);
-      return match != null;
-    }, orElse: () => null);
+    try {
+      final routePath = _getRoutePath(settings.name);
+      RegExpMatch match;
+      final routeEntry = _routerDict.firstWhere((it) {
+        match = it.regex.firstMatch(routePath);
+        return match != null;
+      }, orElse: () => null);
 
-    if (routeEntry == null) return null;
+      if (routeEntry == null) return null;
 
-    List<String> names;
+      List<String> names;
 
-    if (match.groupCount > 0 && match.groupNames.isNotEmpty) {
-      names = match.groupNames.toList();
-    } else {
-      names = [];
-    }
+      if (match.groupCount > 0 && match.groupNames.isNotEmpty) {
+        names = match.groupNames.toList();
+      } else {
+        names = [];
+      }
 
-    final pathArgs = <String, String>{
-      for (var name in names) name: match.namedGroup(name),
-    };
+      final pathArgs = <String, String>{
+        for (var name in names) name: match.namedGroup(name),
+      };
 
-    return CupertinoPageRoute(
-      settings: settings,
-      builder: (context) => routeEntry.routeBuilder(
-        context,
-        RouteArgs(pathArgs, settings.arguments),
-      ),
-    );
+      return CupertinoPageRoute(
+        settings: settings,
+        builder: (context) => routeEntry.routeBuilder(
+          context,
+          RouteArgs(pathArgs, settings.arguments),
+        ),
+      );
+    } on RouterNotFoundException {}
   }
 }
 
@@ -103,3 +106,5 @@ class RouteArgs {
 
   String operator [](String key) => pathArgs[key];
 }
+
+class RouterNotFoundException implements Exception {}
