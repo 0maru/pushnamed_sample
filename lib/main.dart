@@ -8,7 +8,6 @@ import 'package:pushnamed_sample/provider/router_controller.dart';
 import 'package:pushnamed_sample/router/config.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [
