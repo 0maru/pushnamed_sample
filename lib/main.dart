@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:pushnamed_sample/constants.dart';
 import 'package:pushnamed_sample/provider/application_controller.dart';
 import 'package:pushnamed_sample/provider/router_controller.dart';
-import 'package:pushnamed_sample/router.dart';
+import 'package:pushnamed_sample/router/config.dart';
 
 void main() => runApp(
       MultiProvider(
@@ -18,12 +18,6 @@ void main() => runApp(
         child: MyApp(),
       ),
     );
-
-final router = Router.create({
-  '/': (context, _) => Home(),
-  '/post/:id': (context, args) => Feed.fromRouteArguments(args.body),
-  '/withBody': (context, args) => PageWithBody(body: args.body),
-});
 
 class MyApp extends StatelessWidget {
   @override
