@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pushnamed_sample/provider/router_controller.dart';
+import 'package:pushnamed_sample/utils/custom_browser.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -37,6 +40,18 @@ class Home extends StatelessWidget {
                 "/withBody/",
                 arguments: {"key": "value"},
               );
+            },
+          ),
+          FlatButton(
+            child: Text('not found'),
+            onPressed: () {
+              context.read<RouterController>().push('https://google.com', root: true);
+            },
+          ),
+          FlatButton(
+            child: Text('not found'),
+            onPressed: () async {
+              await CustomBrowser().open(url: 'https://google.com');
             },
           ),
         ],

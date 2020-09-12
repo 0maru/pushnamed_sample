@@ -32,15 +32,13 @@ class _RouterImpl implements Router {
     }, orElse: () => null);
 
     if (routeEntry == null) {
-      return null;
+      // パスが無いときはWebViewで開く
+      throw RouterNotFoundException();
     }
 
-    List<String> names;
-
+    List<String> names = [];
     if (match.groupCount > 0 && match.groupNames.isNotEmpty) {
       names = match.groupNames.toList();
-    } else {
-      names = [];
     }
 
     final pathArgs = <String, String>{
@@ -51,7 +49,10 @@ class _RouterImpl implements Router {
       settings: settings,
       builder: (context) => routeEntry.routeBuilder(
         context,
-        RouteArgs(pathArgs, settings.arguments),
+        RouteArgs(
+          pathArgs,
+          settings.arguments,
+        ),
       ),
     );
   }

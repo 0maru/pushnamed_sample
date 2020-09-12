@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pushnamed_sample/router/models.dart';
+import 'package:pushnamed_sample/utils/custom_browser.dart';
 
 class RouterController with ChangeNotifier {
   RouterController({@required this.locator});
@@ -28,15 +30,24 @@ class RouterController with ChangeNotifier {
     Object arguments,
     bool root = false,
   }) {
-    GlobalKey<NavigatorState> _navigator = navigatorKeys[currentTabName];
-    if (root) {
-      // BottomTabNavigator の上にページを出したい場合
-      _navigator = _navigatorKey;
+    try {
+      if (path.startsWith('http')) {
+        throw RouterNotFoundException();
+      }
+      GlobalKey<NavigatorState> _navigator = navigatorKeys[currentTabName];
+      if (root) {
+        // BottomTabNavigator の上にページを出したい場合
+        _navigator = _navigatorKey;
+      }
+      return _navigator.currentState.pushNamed<T>(
+        path,
+        arguments: arguments,
+      );
+    } on RouterNotFoundException {
+      final browser = CustomBrowser();
+      browser.open(url: path);
+      return null;
     }
-    return _navigator.currentState.pushNamed<T>(
-      path,
-      arguments: arguments,
-    );
   }
 
   void pop<T extends Object>([T result, bool root = false]) {

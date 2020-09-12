@@ -2,7 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class CustomBrowser extends ChromeSafariBrowser {
-  CustomBrowser({browserFallback}) : super(bFallback: browserFallback);
+  final BuildContext context;
+
+  CustomBrowser({
+    browserFallback,
+    this.context,
+  }) : super(bFallback: browserFallback);
 
   @override
   void onOpened() {
@@ -17,5 +22,6 @@ class CustomBrowser extends ChromeSafariBrowser {
   @override
   void onClosed() {
     debugPrint("CustomBrowser browser closed");
+    Navigator.of(context).pop();
   }
 }
