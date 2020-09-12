@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: RouterName.homeRoute,
+      navigatorKey: context.watch<GlobalKey<NavigatorState>>(),
       onGenerateRoute: router.generateRoute,
       onUnknownRoute: (settings) {
         return CupertinoPageRoute(builder: (_) => NotFoundPage());

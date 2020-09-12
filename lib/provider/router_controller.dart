@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pushnamed_sample/router/models.dart';
 import 'package:pushnamed_sample/utils/custom_browser.dart';
 
-class RouterController with ChangeNotifier {
+class RouterController<T> with ChangeNotifier {
   RouterController({@required this.locator});
 
   final Locator locator;
@@ -39,10 +39,10 @@ class RouterController with ChangeNotifier {
         // BottomTabNavigator の上にページを出したい場合
         _navigator = _navigatorKey;
       }
-      return _navigator.currentState.pushNamed<T>(
-        path,
-        arguments: arguments,
-      );
+      if (arguments == null) {
+        _navigator.currentState.pushNamed(path);
+      }
+      _navigator.currentState.pushNamed(path, arguments: arguments);
     } on RouterNotFoundException {
       final browser = CustomBrowser();
       browser.open(url: path);

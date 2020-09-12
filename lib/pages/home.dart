@@ -1,49 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pushnamed_sample/pages/feed.dart';
 import 'package:pushnamed_sample/provider/router_controller.dart';
-import 'package:pushnamed_sample/utils/custom_browser.dart';
 
 class Home extends StatelessWidget {
+  static final path = '/';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushReplacementNamed("/");
+          Navigator.of(context).pushNamed(Home.path);
+          context.read<RouterController>().push(Home.path, root: true);
         },
       ),
       body: Column(
         children: [
           FlatButton(
-            child: Text('/feed/123/'),
+            child: Text(Home.path),
             onPressed: () {
-              Navigator.of(context).pushNamed(
-                "/feed/123/",
-                arguments: {"key": "value"},
-              );
+              Navigator.of(context).pushNamed<Object>(Home.path);
             },
           ),
           FlatButton(
-            child: Text('/feed/:id/'),
+            child: Text(Feed.path),
             onPressed: () {
-              Navigator.of(context).pushNamed(
-                "/feed/456/",
-                arguments: {"key": "value"},
-              );
+              context.read<RouterController>().push(
+                    Feed.path,
+                    arguments: {"key": "value"},
+                    root: true,
+                  );
             },
           ),
           FlatButton(
-            child: Text('/withBody/'),
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                "/withBody/",
-                arguments: {"key": "value"},
-              );
-            },
-          ),
-          FlatButton(
-            child: Text('not found'),
+            child: Text('URL'),
             onPressed: () {
               context.read<RouterController>().push('https://google.com', root: true);
             },
@@ -51,7 +43,7 @@ class Home extends StatelessWidget {
           FlatButton(
             child: Text('not found'),
             onPressed: () async {
-              await CustomBrowser().open(url: 'https://google.com');
+              context.read<RouterController>().push('/google.com', root: true);
             },
           ),
         ],

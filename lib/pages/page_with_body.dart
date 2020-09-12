@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PageWithBody extends StatelessWidget {
+  static final path = '/withBody/';
   final Object body;
 
   const PageWithBody({

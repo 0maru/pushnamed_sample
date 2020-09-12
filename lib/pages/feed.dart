@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Feed extends StatelessWidget {
-//  final String data;
+  static final path = '/feed/:id/';
+
   final Map<String, String> contents;
 
   const Feed._({

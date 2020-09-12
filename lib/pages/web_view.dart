@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pushnamed_sample/utils/custom_browser.dart';
 
 class WebViewPage extends StatefulWidget {
+  static final path = '/webview/';
   final String url;
 
   WebViewPage({
