@@ -32,7 +32,7 @@ class _RouterImpl implements Router {
     }, orElse: () => null);
 
     if (routeEntry == null) {
-      throw RouterNotFoundException();
+      return null;
     }
 
     List<String> names;
