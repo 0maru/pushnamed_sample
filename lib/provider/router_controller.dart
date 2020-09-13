@@ -9,16 +9,19 @@ class RouterController<T> with ChangeNotifier {
 
   final Locator locator;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final Map<String, GlobalKey<NavigatorState>> navigatorKeys = {
-    'home': GlobalKey<NavigatorState>(),
-    'list': GlobalKey<NavigatorState>(),
+  final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
+    'top': GlobalKey<NavigatorState>(),
     'config': GlobalKey<NavigatorState>(),
   };
-  String currentTabName = 'home';
+  String _currentTabName = 'top';
   GlobalKey<NavigatorState> get _navigatorKey => locator();
+  GlobalKey<NavigatorState> get currentKey => _navigatorKeys[_currentTabName];
+  String get currentTabName => _currentTabName;
+
+  GlobalKey<NavigatorState> tabsKey(String tab) => _navigatorKeys[tab];
 
   void changeTab(String tabName) {
-    currentTabName = tabName;
+    _currentTabName = tabName;
     notifyListeners();
   }
 
@@ -34,7 +37,7 @@ class RouterController<T> with ChangeNotifier {
       if (path.startsWith('http')) {
         throw RouterNotFoundException();
       }
-      GlobalKey<NavigatorState> _navigator = navigatorKeys[currentTabName];
+      GlobalKey<NavigatorState> _navigator = _navigatorKeys[_currentTabName];
       if (root) {
         // BottomTabNavigator の上にページを出したい場合
         _navigator = _navigatorKey;
@@ -51,7 +54,7 @@ class RouterController<T> with ChangeNotifier {
   }
 
   void pop<T extends Object>([T result, bool root = false]) {
-    GlobalKey<NavigatorState> _navigator = navigatorKeys[currentTabName];
+    GlobalKey<NavigatorState> _navigator = _navigatorKeys[_currentTabName];
     if (root) {
       _navigator = _navigatorKey;
     }

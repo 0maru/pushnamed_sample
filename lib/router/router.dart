@@ -5,7 +5,8 @@ import 'models.dart';
 typedef Widget RouteBuilder(BuildContext context, RouteArgs args);
 
 abstract class Router {
-  Route<dynamic> generateRoute(RouteSettings settings);
+  static final rootPath = '/';
+  Route<dynamic> generateRoute(RouteSettings settings, {String tabRootPath});
 
   factory Router.create(Map<String, RouteBuilder> routeMap) => _RouterImpl(routeMap);
 }
@@ -23,8 +24,15 @@ class _RouterImpl implements Router {
         ];
 
   @override
-  Route generateRoute(RouteSettings settings) {
-    final routePath = _getRoutePath(settings.name);
+  Route generateRoute(RouteSettings settings, {String tabRootPath}) {
+    String path;
+    if (tabRootPath?.isEmpty ?? true) {
+      path = settings.name;
+    } else {
+      path = settings.name == Router.rootPath ? tabRootPath : settings.name;
+    }
+    debugPrint('pagePath ${path}');
+    final routePath = _getRoutePath(path);
     RegExpMatch match;
     final routeEntry = _routerDict.firstWhere((it) {
       match = it.regex.firstMatch(routePath);

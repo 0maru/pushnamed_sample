@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:pushnamed_sample/pages/feed.dart';
-import 'package:pushnamed_sample/provider/router_controller.dart';
+import 'package:pushnamed_sample/pages/config.dart';
+import 'package:pushnamed_sample/pages/top.dart';
+import 'package:pushnamed_sample/widgets/bottom_navigator/bottom_navigator.dart';
+import 'package:pushnamed_sample/widgets/tab_navigator/tab_navigator.dart';
 
 class Home extends StatelessWidget {
   static final path = '/';
@@ -9,45 +10,18 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(Home.path);
-          context.read<RouterController>().push(Home.path, root: true);
-        },
-      ),
-      body: Column(
+      body: Stack(
         children: [
-          FlatButton(
-            child: Text(Home.path),
-            onPressed: () {
-              Navigator.of(context).pushNamed<Object>(Home.path);
-            },
-          ),
-          FlatButton(
-            child: Text(Feed.path),
-            onPressed: () {
-              context.read<RouterController>().push(
-                    Feed.path,
-                    arguments: {"key": "value"},
-                    root: true,
-                  );
-            },
-          ),
-          FlatButton(
-            child: Text('URL'),
-            onPressed: () {
-              context.read<RouterController>().push('https://google.com', root: true);
-            },
-          ),
-          FlatButton(
-            child: Text('not found'),
-            onPressed: () async {
-              context.read<RouterController>().push('/google.com', root: true);
-            },
-          ),
+          TabNavigator(tabItem: tabItems['top']),
+          TabNavigator(tabItem: tabItems['config']),
         ],
       ),
+      bottomNavigationBar: const BottomNavigation(),
     );
   }
+
+  static final tabItems = {
+    'top': TabItem(name: 'top', path: TopPage.path),
+    'config': TabItem(name: 'config', path: ConfigPage.path),
+  };
 }
